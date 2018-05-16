@@ -55,6 +55,10 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         Boton miboton = (Boton) e.getComponent();
         if(e.getButton() == MouseEvent.BUTTON3)
         {
+            miboton.setText("!");
+        }
+        if(e.getButton() == MouseEvent.BUTTON2)
+        {
             miboton.setText("?");
         }
     }
