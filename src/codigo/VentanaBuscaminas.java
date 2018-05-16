@@ -27,7 +27,9 @@ public class VentanaBuscaminas extends javax.swing.JFrame
     public VentanaBuscaminas() 
     {
         initComponents();
-        setSize(300,300);
+        setSize(400,400);
+        setTitle("Buscaminas by Marco Girbau");
+        setResizable(false);
         getContentPane().setLayout(new GridLayout(filas, columnas));
         for(int i = 0; i < filas; i++)
         {
@@ -73,7 +75,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame
             //TODO hay que hacer una version que chequee si en la casillas
             //seleccionada ya hay mina, porque en ese caso tiene que buscar otra
             arrayBotones[f][c].setMina(1);
-            arrayBotones[f][c].setText("m");
+            //arrayBotones[f][c].setText("m");
         }
     }
     
