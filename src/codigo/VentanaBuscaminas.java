@@ -20,6 +20,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame
 {
     int filas = 8;
     int columnas = 8;
+    int numeroMinas = 10;
     
     Icon bandera = new ImageIcon(getClass().getResource("/imagenes/bombflagged.gif"));
     Icon mina = new ImageIcon(getClass().getResource("/imagenes/bombdeath.gif"));
@@ -54,7 +55,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame
                 });
             }
         }
-        ponMinas(10);
+        ponMinas(numeroMinas);
         cuentaMinas();
     }
     
@@ -69,6 +70,10 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         {
             miboton.setIcon(pregunta);
         }
+        if(e.getButton() == MouseEvent.BUTTON1)
+        {
+            miboton.setEnabled(false);
+        }
     }
     
     private void ponMinas(int numeroMinas)
@@ -78,10 +83,14 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         {
             int f = r.nextInt(filas);
             int c = r.nextInt(columnas);
-            //TODO hay que hacer una version que chequee si en la casillas
-            //seleccionada ya hay mina, porque en ese caso tiene que buscar otra
-            arrayBotones[f][c].setMina(1);
-            arrayBotones[f][c].setIcon(mina);
+            if(arrayBotones[f][c].getMina() == 0)
+            {
+                arrayBotones[f][c].setMina(1);
+            }
+            if(arrayBotones[f][c].getMina() == 1)
+            {
+                arrayBotones[f][c].setIcon(mina);
+            }
             //arrayBotones[f][c].setText("m");
         }
     }
@@ -90,7 +99,6 @@ public class VentanaBuscaminas extends javax.swing.JFrame
     //de minas que tiene alrededor
     private void cuentaMinas()
     {
-        //TODO falta por hacer que calcule las minas en el borde exterior
         int minas = 0;
         for(int i = 0; i < filas; i++)
         {
@@ -109,11 +117,11 @@ public class VentanaBuscaminas extends javax.swing.JFrame
 //                    minas += arrayBotones[i][j + 1].getMina();//La mina de la derecha
 //                    minas += arrayBotones[i + 1][j + 1].getMina();//La mina de abajo a la derecha
 //                }
-                for (int k = 0; k <= 2; k++)//Este bucle recorre supuestamente, porque tengo que arreglarlo, las 8 casillas de alrededor
+                for (int k = -1; k <= 1; k++)//Este bucle recorre supuestamente, porque tengo que arreglarlo, las 8 casillas de alrededor
                 {
-                    for (int m = 0; m <= 2; m++)
+                    for (int m = -1; m <= 1; m++)
                     {
-                        if ((i + k > 0) && (j + m > 0) && (i + k < filas) && (j + m < columnas))
+                        if ((i + k >= 0) && (j + m >= 0) && (i + k < filas) && (j + m < columnas))
                         {
                             minas += arrayBotones[i + k][j + m].getMina();
                         }
@@ -123,7 +131,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame
                 arrayBotones[i][j].setNumMinasAlrededor(minas);
                 
                 //TODO comentar la siguiente parte para que no aparezcan los numeros al iniciar la partida
-                if(arrayBotones[i][j].getMina() == 0)
+                if(arrayBotones[i][j].getMina() == 0 && arrayBotones[i][j].getNumMinasAlrededor() != 0)
                 {
                     arrayBotones[i][j].setText(String.valueOf(minas));
                 }

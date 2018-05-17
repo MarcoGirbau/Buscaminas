@@ -43,5 +43,9 @@ public class Boton extends JButton
     public int getMina() {
         return mina;
     }
+
+    public int getNumMinasAlrededor() {
+        return numMinasAlrededor;
+    }
     
 }
