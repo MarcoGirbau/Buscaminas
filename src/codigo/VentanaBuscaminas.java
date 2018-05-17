@@ -9,6 +9,8 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
@@ -18,6 +20,10 @@ public class VentanaBuscaminas extends javax.swing.JFrame
 {
     int filas = 8;
     int columnas = 8;
+    
+    Icon bandera = new ImageIcon(getClass().getResource("/imagenes/bombflagged.gif"));
+    Icon mina = new ImageIcon(getClass().getResource("/imagenes/bombdeath.gif"));
+    Icon pregunta = new ImageIcon(getClass().getResource("/imagenes/bombquestion.gif"));
     
     Boton [][] arrayBotones = new Boton[filas][columnas];
     
@@ -57,11 +63,11 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         Boton miboton = (Boton) e.getComponent();
         if(e.getButton() == MouseEvent.BUTTON3)
         {
-            miboton.setText("!");
+            miboton.setIcon(bandera);
         }
         if(e.getButton() == MouseEvent.BUTTON2)
         {
-            miboton.setText("?");
+            miboton.setIcon(pregunta);
         }
     }
     
@@ -75,6 +81,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame
             //TODO hay que hacer una version que chequee si en la casillas
             //seleccionada ya hay mina, porque en ese caso tiene que buscar otra
             arrayBotones[f][c].setMina(1);
+            arrayBotones[f][c].setIcon(mina);
             //arrayBotones[f][c].setText("m");
         }
     }
@@ -89,19 +96,30 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         {
             for(int j = 0; j < columnas; j++)
             {
-                if((i > 0) && (j > 0) && (i < filas - 1) && (j < columnas - 1))
+//                if((i > 0) && (j > 0) && (i < filas - 1) && (j < columnas - 1))
+//                {
+//                    minas += arrayBotones[i - 1][j - 1].getMina();//La mina de arriba a la izquierda
+//                    minas += arrayBotones[i][j - 1].getMina();//La mina de la izquierda
+//                    minas += arrayBotones[i + 1][j - 1].getMina();//La mina de abajo a la izquierda
+//                    
+//                    minas += arrayBotones[i - 1][j].getMina();//La mina de arriba
+//                    minas += arrayBotones[i + 1][j].getMina();//La mina de abajo
+//                    
+//                    minas += arrayBotones[i - 1][j + 1].getMina();//La mina de arriba a la derecha
+//                    minas += arrayBotones[i][j + 1].getMina();//La mina de la derecha
+//                    minas += arrayBotones[i + 1][j + 1].getMina();//La mina de abajo a la derecha
+//                }
+                for (int k = 0; k <= 2; k++)//Este bucle recorre supuestamente, porque tengo que arreglarlo, las 8 casillas de alrededor
                 {
-                    minas += arrayBotones[i - 1][j - 1].getMina();//La mina de arriba a la izquierda
-                    minas += arrayBotones[i][j - 1].getMina();//La mina de la izquierda
-                    minas += arrayBotones[i + 1][j - 1].getMina();//La mina de abajo a la izquierda
-                    
-                    minas += arrayBotones[i - 1][j].getMina();//La mina de arriba
-                    minas += arrayBotones[i + 1][j].getMina();//La mina de abajo
-                    
-                    minas += arrayBotones[i - 1][j + 1].getMina();//La mina de arriba a la derecha
-                    minas += arrayBotones[i][j + 1].getMina();//La mina de la derecha
-                    minas += arrayBotones[i + 1][j + 1].getMina();//La mina de abajo a la derecha
+                    for (int m = 0; m <= 2; m++)
+                    {
+                        if ((i + k > 0) && (j + m > 0) && (i + k < filas) && (j + m < columnas))
+                        {
+                            minas += arrayBotones[i + k][j + m].getMina();
+                        }
+                    }
                 }
+                
                 arrayBotones[i][j].setNumMinasAlrededor(minas);
                 
                 //TODO comentar la siguiente parte para que no aparezcan los numeros al iniciar la partida
