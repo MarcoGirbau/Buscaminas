@@ -28,6 +28,9 @@ public class VentanaBuscaminas extends javax.swing.JFrame
     
     Boton [][] arrayBotones = new Boton[filas][columnas];
     
+    boolean cancer [][] = new boolean[filas][columnas];
+    int sida [][] = new int[filas][columnas];
+    
     /**
      * Creates new form VentanaBuscaminas
      */
@@ -44,6 +47,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame
             {
                 Boton boton = new Boton(i,j);
                 getContentPane().add(boton);
+                
                 arrayBotones[i][j] = boton;
                 boton.addMouseListener(new MouseAdapter() 
                 {
@@ -53,6 +57,13 @@ public class VentanaBuscaminas extends javax.swing.JFrame
                         botonPulsado(evt);
                     }
                 });
+            }
+        }
+        for(int k = 0; k < filas; k++)
+        {
+            for(int m = 0; m < columnas; m++)
+            {
+                cancer[k][m] = false;
             }
         }
         ponMinas(numeroMinas);
@@ -73,6 +84,22 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         if(e.getButton() == MouseEvent.BUTTON1)
         {
             miboton.setEnabled(false);
+            int valorboton = miboton.getValor();
+            if(valorboton != 0)
+            {
+                String valor = Integer.toString(miboton.getValor());
+                miboton.setText(valor);
+            }
+            else
+            {
+                buscaEspaciosDeMierda(miboton.geti(), miboton.getj());
+            }
+            if(miboton.getMina() == 1)
+            {
+                miboton.setIcon(mina);
+                System.out.println("Has perdido por imbecil");
+                this.setEnabled(false);
+            }
         }
     }
     
@@ -87,10 +114,6 @@ public class VentanaBuscaminas extends javax.swing.JFrame
             {
                 arrayBotones[f][c].setMina(1);
             }
-            if(arrayBotones[f][c].getMina() == 1)
-            {
-                arrayBotones[f][c].setIcon(mina);
-            }
             //arrayBotones[f][c].setText("m");
         }
     }
@@ -104,20 +127,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         {
             for(int j = 0; j < columnas; j++)
             {
-//                if((i > 0) && (j > 0) && (i < filas - 1) && (j < columnas - 1))
-//                {
-//                    minas += arrayBotones[i - 1][j - 1].getMina();//La mina de arriba a la izquierda
-//                    minas += arrayBotones[i][j - 1].getMina();//La mina de la izquierda
-//                    minas += arrayBotones[i + 1][j - 1].getMina();//La mina de abajo a la izquierda
-//                    
-//                    minas += arrayBotones[i - 1][j].getMina();//La mina de arriba
-//                    minas += arrayBotones[i + 1][j].getMina();//La mina de abajo
-//                    
-//                    minas += arrayBotones[i - 1][j + 1].getMina();//La mina de arriba a la derecha
-//                    minas += arrayBotones[i][j + 1].getMina();//La mina de la derecha
-//                    minas += arrayBotones[i + 1][j + 1].getMina();//La mina de abajo a la derecha
-//                }
-                for (int k = -1; k <= 1; k++)//Este bucle recorre supuestamente, porque tengo que arreglarlo, las 8 casillas de alrededor
+                for (int k = -1; k <= 1; k++)
                 {
                     for (int m = -1; m <= 1; m++)
                     {
@@ -133,10 +143,39 @@ public class VentanaBuscaminas extends javax.swing.JFrame
                 //TODO comentar la siguiente parte para que no aparezcan los numeros al iniciar la partida
                 if(arrayBotones[i][j].getMina() == 0 && arrayBotones[i][j].getNumMinasAlrededor() != 0)
                 {
-                    arrayBotones[i][j].setText(String.valueOf(minas));
+                    arrayBotones[i][j].setValor(minas);
+                    sida[i][j] = minas;
                 }
                 minas = 0;
             }
+        }
+    }
+    
+    private void buscaEspaciosDeMierda(int i , int j)
+    {
+        if(j > 0 && arrayBotones[i][j - 1].isEnabled() && arrayBotones[i][j - 1].getValor() == 0)
+        {
+            arrayBotones[i][j - 1].setEnabled(false);//La mina de la izquierda
+            buscaEspaciosDeMierda(i, j - 1); //Viva la recursividad
+            //Si boton esta enabled y valor es 0 entonces deshabilito el boton e invoco la funcion buscaEspaciosDeMierda con i, j - 1
+        }
+        if(i > 0 && arrayBotones[i - 1][j].isEnabled() && arrayBotones[i - 1][j].getValor() == 0)
+        {
+            arrayBotones[i - 1][j].setEnabled(false);//La mina de arriba
+            buscaEspaciosDeMierda(i - 1, j); //Viva la recursividad
+            //Si boton esta enabled y valor es 0 entonces deshabilito el boton e invoco la funcion buscaEspaciosDeMierda con i - 1, j
+        }
+        if(i < filas - 1 && arrayBotones[i + 1][j].isEnabled() && arrayBotones[i + 1][j].getValor() == 0)
+        {
+            arrayBotones[i + 1][j].setEnabled(false);//La mina de abajo
+            buscaEspaciosDeMierda(i + 1, j); //Viva la recursividad
+            //Si boton esta enabled y valor es 0 entonces deshabilito el boton e invoco la funcion buscaEspaciosDeMierda con i + 1, j
+        }
+        if(j < columnas - 1 && arrayBotones[i][j + 1].isEnabled() && arrayBotones[i][j + 1].getValor() == 0)
+        {
+            arrayBotones[i][j + 1].setEnabled(false);//La mina de la derecha
+            buscaEspaciosDeMierda(i, j + 1); //Viva la recursividad
+            //Si boton esta enabled y valor es 0 entonces deshabilito el boton e invoco la funcion buscaEspaciosDeMierda con i, j + 1
         }
     }
     /**

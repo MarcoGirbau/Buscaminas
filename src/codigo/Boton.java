@@ -16,6 +16,7 @@ public class Boton extends JButton
     private int i = 0;
     private int j = 0;
     private int numMinasAlrededor = 0;
+    private int valor = 0;
     
     public Boton (int _i, int _j)
     {
@@ -24,28 +25,45 @@ public class Boton extends JButton
         this.setBorder(null);
     }
 
-    public int geti() {
+    public int geti() 
+    {
         return i;
     }
 
-    public int getj() {
+    public int getj() 
+    {
         return j;
     }
 
-    public void setMina(int mina) {
+    public void setMina(int mina) 
+    {
         this.mina = mina;
     }
 
-    public void setNumMinasAlrededor(int numMinasAlrededor) {
+    public void setNumMinasAlrededor(int numMinasAlrededor) 
+    {
         this.numMinasAlrededor = numMinasAlrededor;
     }
 
-    public int getMina() {
+    public int getMina() 
+    {
         return mina;
     }
 
-    public int getNumMinasAlrededor() {
+    public int getNumMinasAlrededor() 
+    {
         return numMinasAlrededor;
     }
+
+    public int getValor() 
+    {
+        return valor;
+    }
+
+    public void setValor(int valor) 
+    {
+        this.valor = valor;
+    }
+    
     
 }
