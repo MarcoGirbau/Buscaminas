@@ -23,7 +23,7 @@ public class VentanaBuscaminas extends javax.swing.JFrame
     int numeroMinas = 10;
     
     Icon bandera = new ImageIcon(getClass().getResource("/imagenes/bombflagged.gif"));
-    Icon mina = new ImageIcon(getClass().getResource("/imagenes/bombdeath.gif"));
+    Icon mina = new ImageIcon(getClass().getResource("/imagenes/jorgecisnerosmini.jpg"));
     Icon pregunta = new ImageIcon(getClass().getResource("/imagenes/bombquestion.gif"));
     
     Boton [][] arrayBotones = new Boton[filas][columnas];
@@ -38,9 +38,13 @@ public class VentanaBuscaminas extends javax.swing.JFrame
     {
         initComponents();
         setSize(400,400);
+        setLocationRelativeTo(null);
         setTitle("Buscaminas by Marco Girbau");
         setResizable(false);
         getContentPane().setLayout(new GridLayout(filas, columnas));
+        jLabel1.setText("Has perdido por imbecil");
+        jButton1.setText("Reiniciar");
+        jDialog.setLocationRelativeTo(null);
         for(int i = 0; i < filas; i++)
         {
             for(int j = 0; j < columnas; j++)
@@ -75,11 +79,11 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         Boton miboton = (Boton) e.getComponent();
         if(e.getButton() == MouseEvent.BUTTON3)
         {
-            miboton.setIcon(bandera);
+            miboton.setText("!!");
         }
         if(e.getButton() == MouseEvent.BUTTON2)
         {
-            miboton.setIcon(pregunta);
+            miboton.setText("");
         }
         if(e.getButton() == MouseEvent.BUTTON1)
         {
@@ -97,8 +101,13 @@ public class VentanaBuscaminas extends javax.swing.JFrame
             if(miboton.getMina() == 1)
             {
                 miboton.setIcon(mina);
+                jDialog.setVisible(true);
+                jDialog.setSize(250,150);
                 System.out.println("Has perdido por imbecil");
-                this.setEnabled(false);
+                mierdaSeca();
+                
+                //System.exit(0);
+                //this.setEnabled(false);
             }
         }
     }
@@ -110,10 +119,12 @@ public class VentanaBuscaminas extends javax.swing.JFrame
         {
             int f = r.nextInt(filas);
             int c = r.nextInt(columnas);
-            if(arrayBotones[f][c].getMina() == 0)
+            while(arrayBotones[f][c].getMina() == 1)
             {
-                arrayBotones[f][c].setMina(1);
+                f = r.nextInt(filas);
+                c = r.nextInt(columnas);
             }
+            arrayBotones[f][c].setMina(1);
             //arrayBotones[f][c].setText("m");
         }
     }
@@ -178,6 +189,36 @@ public class VentanaBuscaminas extends javax.swing.JFrame
             //Si boton esta enabled y valor es 0 entonces deshabilito el boton e invoco la funcion buscaEspaciosDeMierda con i, j + 1
         }
     }
+    
+    private void mierdaSeca()
+    {
+        for(int i = 0; i < filas; i++)
+        {
+            for(int j = 0; j < columnas; j++)
+            {
+                if(arrayBotones[i][j].getMina() == 0)
+                {
+                    if(arrayBotones[i][j].getNumMinasAlrededor() != 0)
+                    {
+                       arrayBotones[i][j].setText(String.valueOf(arrayBotones[i][j].getNumMinasAlrededor())); 
+                    }
+                }
+                else
+                {
+                    arrayBotones[i][j].setIcon(mina);
+                }
+                arrayBotones[i][j].setEnabled(false);
+            }
+        }
+    }
+    
+    private void reset()
+    {
+        VentanaBuscaminas sifilis = new VentanaBuscaminas();
+        sifilis.setVisible(true);
+        dispose();
+        jDialog.setVisible(false);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -186,6 +227,40 @@ public class VentanaBuscaminas extends javax.swing.JFrame
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        jDialog = new javax.swing.JDialog();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+
+        jLabel1.setText("jLabel1");
+
+        jButton1.setText("jButton1");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton1MousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jDialogLayout = new javax.swing.GroupLayout(jDialog.getContentPane());
+        jDialog.getContentPane().setLayout(jDialogLayout);
+        jDialogLayout.setHorizontalGroup(
+            jDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1))
+                .addContainerGap(295, Short.MAX_VALUE))
+        );
+        jDialogLayout.setVerticalGroup(
+            jDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(234, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -202,6 +277,10 @@ public class VentanaBuscaminas extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+        reset();
+    }//GEN-LAST:event_jButton1MousePressed
 
     /**
      * @param args the command line arguments
@@ -239,5 +318,8 @@ public class VentanaBuscaminas extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JDialog jDialog;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
